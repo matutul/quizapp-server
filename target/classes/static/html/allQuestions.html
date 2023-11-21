@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300&display=swap" rel="stylesheet">
+        <title>All Questions</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div class="w-full min-h-screen bg-slate-100">
+            <nav id="sharedNavbar" class="w-full h-[50px] flex justify-center bg-slate-800">
+            </nav>
+
+            <div class="w-full flex justify-center p-10">
+                <div class="w-[800px] h-fit flex flex-col bg-white rounded-md overflow-hidden shadow-[0px_2px_15px_-5px] shadow-gray-400">
+                    <div class="flex flex-row justify-between items-center p-5 bg-slate-800 text-gray-50 font-semibold text-lg cursor-default">
+                        <h3>Questions</h3>
+                        <div>
+                            <label for="category">Category: </label>
+                            <select id="category" name="category" defaultvalue="all"  onchange="onchangeHandler()" class="bg-slate-600 rounded-md outline-none">
+                                <option value="all">All</option>
+                                <option value="java">Java</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="PHP">PHP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="questionsDisplay" class="flex flex-col divide-y">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+<script>
+    let questions = [];
+
+    let category = "";
+
+    getAllQuestions();
+
+    function setQuestionsDiv(){
+        let display = ``;
+        if(questions){
+            questions.map((question, index) => {
+                display += `<div class="w-full h-fit px-5 py-3 flex flex-col">
+                    <p class="font-semibold">${index+1}. ${question.questionTitle}</p>
+                    <div class="w-full h-fit grid grid-cols-5">
+                        <p class="col-span-1">a. ${question.option1}</p>
+                        <p class="col-span-1">b. ${question.option2}</p>
+                        <p class="col-span-1">c. ${question.option3}</p>
+                        <p class="col-span-1">d. ${question.option4}</p>
+                        <p class="col-span-1 text-green-600">Answer: ${question.rightAnswer}</p>
+                    </div>
+                </div>`
+            })
+        }
+        document.getElementById("questionsDisplay").innerHTML = display;
+    }
+    async function getQuestionsByCategory(category){
+        const response = await fetch(`http://localhost:8080/question/${category}`);
+        questions = await response.json();
+        setQuestionsDiv();
+    }
+    async function getAllQuestions(){
+        const response = await fetch("http://localhost:8080/question/allQuestions");
+        questions = await response.json();
+        setQuestionsDiv();
+    }
+    function onchangeHandler(){
+        display=``;
+        const category = document.getElementById("category").value;
+        if(category == "all"){
+            const questions = getAllQuestions();
+        }else{
+            const questions = getQuestionsByCategory(category);
+        }
+    }
+</script>
+    <script src="../js/navbar.js"></script>
+</html>

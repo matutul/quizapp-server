@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300&display=swap" rel="stylesheet">
+
+    <title>Add new question</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="w-full min-h-screen bg-slate-100">
+        <nav id="sharedNavbar" class="w-full h-[50px] flex justify-center bg-slate-800">
+        </nav>
+
+        <div class="w-full flex justify-center p-10">
+            <div class="w-[600px] h-fit rounded-md bg-white shadow-[0px_2px_15px_-5px] shadow-gray-400 overflow-hidden">
+                <div class="p-5 text-gray-50 bg-slate-800 font-semibold text-2xl">
+                    <h3>Add new question:</h3>
+                </div>
+                <form class="flex-column w-100">
+                    <div class="w-full flex flex-row items-center justify-between p-5 bg-slate-700 text-gray-50">
+                        <div>
+                            <label for="category">Category: </label>
+                            <select id="category" name="category" defaultvalue="" onchange="handleOnChange(event)" class="px-2 outline-none bg-slate-600 rounded-md py-1" required>
+                                <option value="">None</option>
+                                <option value="java">Java</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="php">PHP</option>
+                                <option value="fundamental">Fundamental</option>
+                                <option value="web">Web</option>
+                                <option value="database">Database</option>
+                                <option value="networking">Networking</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="difficultyLevel">Difficulty Level: </label>
+                            <select id="difficultyLevel" name="difficultyLevel" defaultvalue="" onchange="handleOnChange(event)" class="px-2 outline-none bg-slate-600 rounded-md py-1" required>
+                                <option value="">None</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col gap-2">
+                        <div class="w-full h-fit flex flex-col gap-1">
+                            <label>Question title:</label>
+                            <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="questionTitle" placeholder="Enter the question" onchange="handleOnChange(event)" required/>
+                            </input>
+                        </div>
+                        <div class="w-full h-fit grid grid-cols-2 gap-4">
+                            <div class="w-full h-fit col-span-1 flex flex-col gap-1">
+                                <label>Option 1:</label>
+                                <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="option1" placeholder="Option 1" onchange="handleOnChange(event)" required/>
+                            </div>
+                            <div class="w-full h-fit col-span-1 flex flex-col gap-1">
+                                <label>Option 2:</label>
+                                <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="option2" placeholder="Option 2" onchange="handleOnChange(event)" required/>
+                            </div>
+                        </div>
+                        <div class="w-full h-fit grid grid-cols-2 gap-4">
+                            <div class="w-full h-fit col-span-1 flex flex-col gap-1">
+                                <label>Option 3:</label>
+                                <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="option3" placeholder="Option 3" onchange="handleOnChange(event)" required/>
+                            </div>
+                            <div class="w-full h-fit col-span-1 flex flex-col gap-1">
+                                <label>Option 4:</label>
+                                <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="option4" placeholder="Option 4" onchange="handleOnChange(event)" required/>
+                            </div>
+                        </div>
+                        <div class="w-full h-fit flex flex-col gap-1">
+                            <label>Right Answer:</label>
+                            <input type="text" class="px-2 py-1 outline-none bg-slate-100 rounded-md focus:shadow-md focus:shadow-gray-400" name="rightAnswer" placeholder="Right answer" onchange="handleOnChange(event)" required/>
+                        </div>
+                    </div>
+                    <div class="w-full h-fit bg-slate-800 px-5 pb-5 flex justify-end">
+                        <button id="submitBtn" class="font-semibold text-slate-900 py-1 px-8 w-fit bg-white rounded-b-md hover:bg-green-800 hover:text-white">Add</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let question = {
+        category: "",
+        difficultyLevel: "",
+        questionTitle: "",
+        option1: "",
+        option2: "",
+        option3: "",
+        option4: "",
+        rightAnswer: "",
+    };
+    function handleOnChange(e){
+        e.preventDefault();
+        if(e.target.value){
+            question = {...question, [e.target.name]:e.target.value};
+            console.log(question);
+        }
+        else{
+            alert("This is a required field");
+        }
+    }
+
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.addEventListener("click", formAction);
+
+    function formAction(){
+        if(question.category == "" ||
+        question.difficultyLevel == "" ||
+        question.questionTitle == "" ||
+        question.option1 == "" ||
+        question.option2 == "" ||
+        question.option3 == "" ||
+        question.option4 == "" ||
+        question.rightAnswer == ""){
+            return false;
+        }
+        else{
+            fetch("http://localhost:8080/question/add",{
+                method: "POST",
+                body: JSON.stringify(question),
+                headers: {"Content-Type": "application/json"}
+            });
+        }
+    }
+</script>
+<script src="../js/navbar.js"></script>
+</html>
